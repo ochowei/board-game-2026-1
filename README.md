@@ -29,3 +29,23 @@ npm run preview
 
 - 地圖節點改為使用 Tiled JSON（`.tmj`）格式，檔案位於 `src/maps/taiwan-loop.tmj`。
 - 主要邏輯會在執行時讀取 `Path` 物件層，依照物件 `id` 排序產生棋盤路徑與地格資料。
+
+## CLI 模擬工具
+
+你可以用 CLI 腳本快速模擬一場遊戲，不需開啟瀏覽器：
+
+```bash
+npm run simulate
+```
+
+可選參數：
+
+```bash
+npm run simulate -- --turns 60 --seed 42
+```
+
+- `--turns`：模擬回合數（預設 40）
+- `--seed`：固定亂數種子，讓結果可重現
+- `--quiet`：只輸出最終摘要
+
+此腳本會根據 `src/maps/taiwan-loop.tmj` 的格子資料進行回合模擬，最後輸出勝負、雙方金額與地產持有結果。
