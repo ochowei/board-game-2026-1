@@ -1,518 +1,563 @@
-{
-  "compressionlevel": -1,
-  "height": 15,
-  "infinite": false,
-  "layers": [
-    {
-      "draworder": "topdown",
-      "id": 1,
-      "name": "Path",
-      "objects": [
+{ "compressionlevel":-1,
+ "height":15,
+ "infinite":false,
+ "layers":[
         {
-          "id": 1,
-          "name": "起點",
-          "type": "START",
-          "x": 100,
-          "y": 80,
-          "width": 0,
-          "height": 0,
-          "point": true,
-          "properties": [
-            {
-              "name": "desc",
-              "type": "string",
-              "value": "經過+2000"
-            }
-          ]
-        },
-        {
-          "id": 2,
-          "name": "基隆",
-          "type": "PROP",
-          "x": 170,
-          "y": 80,
-          "width": 0,
-          "height": 0,
-          "point": true,
-          "properties": [
-            {
-              "name": "price",
-              "type": "int",
-              "value": 800
-            },
-            {
-              "name": "rent",
-              "type": "int",
-              "value": 80
-            }
-          ]
-        },
-        {
-          "id": 3,
-          "name": "宜蘭",
-          "type": "PROP",
-          "x": 240,
-          "y": 80,
-          "width": 0,
-          "height": 0,
-          "point": true,
-          "properties": [
-            {
-              "name": "price",
-              "type": "int",
-              "value": 1000
-            },
-            {
-              "name": "rent",
-              "type": "int",
-              "value": 100
-            }
-          ]
-        },
-        {
-          "id": 4,
-          "name": "機會",
-          "type": "CHANCE",
-          "x": 310,
-          "y": 80,
-          "width": 0,
-          "height": 0,
-          "point": true,
-          "properties": [
-            {
-              "name": "desc",
-              "type": "string",
-              "value": "隨機事件"
-            }
-          ]
-        },
-        {
-          "id": 5,
-          "name": "花蓮",
-          "type": "PROP",
-          "x": 380,
-          "y": 80,
-          "width": 0,
-          "height": 0,
-          "point": true,
-          "properties": [
-            {
-              "name": "price",
-              "type": "int",
-              "value": 1400
-            },
-            {
-              "name": "rent",
-              "type": "int",
-              "value": 140
-            }
-          ]
-        },
-        {
-          "id": 6,
-          "name": "繳稅",
-          "type": "TAX",
-          "x": 450,
-          "y": 80,
-          "width": 0,
-          "height": 0,
-          "point": true,
-          "properties": [
-            {
-              "name": "desc",
-              "type": "string",
-              "value": "支付 500"
-            }
-          ]
-        },
-        {
-          "id": 7,
-          "name": "台東",
-          "type": "PROP",
-          "x": 520,
-          "y": 80,
-          "width": 0,
-          "height": 0,
-          "point": true,
-          "properties": [
-            {
-              "name": "price",
-              "type": "int",
-              "value": 1200
-            },
-            {
-              "name": "rent",
-              "type": "int",
-              "value": 120
-            }
-          ]
-        },
-        {
-          "id": 8,
-          "name": "命運",
-          "type": "FATE",
-          "x": 520,
-          "y": 150,
-          "width": 0,
-          "height": 0,
-          "point": true,
-          "properties": [
-            {
-              "name": "desc",
-              "type": "string",
-              "value": "隨機事件"
-            }
-          ]
-        },
-        {
-          "id": 9,
-          "name": "屏東",
-          "type": "PROP",
-          "x": 520,
-          "y": 220,
-          "width": 0,
-          "height": 0,
-          "point": true,
-          "properties": [
-            {
-              "name": "price",
-              "type": "int",
-              "value": 1500
-            },
-            {
-              "name": "rent",
-              "type": "int",
-              "value": 150
-            }
-          ]
-        },
-        {
-          "id": 10,
-          "name": "停車場",
-          "type": "FREE",
-          "x": 520,
-          "y": 290,
-          "width": 0,
-          "height": 0,
-          "point": true,
-          "properties": [
-            {
-              "name": "desc",
-              "type": "string",
-              "value": "無事發生"
-            }
-          ]
-        },
-        {
-          "id": 11,
-          "name": "高雄",
-          "type": "PROP",
-          "x": 520,
-          "y": 360,
-          "width": 0,
-          "height": 0,
-          "point": true,
-          "properties": [
-            {
-              "name": "price",
-              "type": "int",
-              "value": 2800
-            },
-            {
-              "name": "rent",
-              "type": "int",
-              "value": 280
-            }
-          ]
-        },
-        {
-          "id": 12,
-          "name": "台南",
-          "type": "PROP",
-          "x": 520,
-          "y": 430,
-          "width": 0,
-          "height": 0,
-          "point": true,
-          "properties": [
-            {
-              "name": "price",
-              "type": "int",
-              "value": 2500
-            },
-            {
-              "name": "rent",
-              "type": "int",
-              "value": 250
-            }
-          ]
-        },
-        {
-          "id": 13,
-          "name": "機會",
-          "type": "CHANCE",
-          "x": 520,
-          "y": 500,
-          "width": 0,
-          "height": 0,
-          "point": true,
-          "properties": [
-            {
-              "name": "desc",
-              "type": "string",
-              "value": "隨機事件"
-            }
-          ]
-        },
-        {
-          "id": 14,
-          "name": "嘉義",
-          "type": "PROP",
-          "x": 450,
-          "y": 500,
-          "width": 0,
-          "height": 0,
-          "point": true,
-          "properties": [
-            {
-              "name": "price",
-              "type": "int",
-              "value": 1300
-            },
-            {
-              "name": "rent",
-              "type": "int",
-              "value": 130
-            }
-          ]
-        },
-        {
-          "id": 15,
-          "name": "雲林",
-          "type": "PROP",
-          "x": 380,
-          "y": 500,
-          "width": 0,
-          "height": 0,
-          "point": true,
-          "properties": [
-            {
-              "name": "price",
-              "type": "int",
-              "value": 1100
-            },
-            {
-              "name": "rent",
-              "type": "int",
-              "value": 110
-            }
-          ]
-        },
-        {
-          "id": 16,
-          "name": "彰化",
-          "type": "PROP",
-          "x": 310,
-          "y": 500,
-          "width": 0,
-          "height": 0,
-          "point": true,
-          "properties": [
-            {
-              "name": "price",
-              "type": "int",
-              "value": 1200
-            },
-            {
-              "name": "rent",
-              "type": "int",
-              "value": 120
-            }
-          ]
-        },
-        {
-          "id": 17,
-          "name": "台中",
-          "type": "PROP",
-          "x": 240,
-          "y": 500,
-          "width": 0,
-          "height": 0,
-          "point": true,
-          "properties": [
-            {
-              "name": "price",
-              "type": "int",
-              "value": 2200
-            },
-            {
-              "name": "rent",
-              "type": "int",
-              "value": 220
-            }
-          ]
-        },
-        {
-          "id": 18,
-          "name": "命運",
-          "type": "FATE",
-          "x": 170,
-          "y": 500,
-          "width": 0,
-          "height": 0,
-          "point": true,
-          "properties": [
-            {
-              "name": "desc",
-              "type": "string",
-              "value": "隨機事件"
-            }
-          ]
-        },
-        {
-          "id": 19,
-          "name": "苗栗",
-          "type": "PROP",
-          "x": 100,
-          "y": 500,
-          "width": 0,
-          "height": 0,
-          "point": true,
-          "properties": [
-            {
-              "name": "price",
-              "type": "int",
-              "value": 1000
-            },
-            {
-              "name": "rent",
-              "type": "int",
-              "value": 100
-            }
-          ]
-        },
-        {
-          "id": 20,
-          "name": "新竹",
-          "type": "PROP",
-          "x": 100,
-          "y": 430,
-          "width": 0,
-          "height": 0,
-          "point": true,
-          "properties": [
-            {
-              "name": "price",
-              "type": "int",
-              "value": 1800
-            },
-            {
-              "name": "rent",
-              "type": "int",
-              "value": 180
-            }
-          ]
-        },
-        {
-          "id": 21,
-          "name": "桃園",
-          "type": "PROP",
-          "x": 100,
-          "y": 360,
-          "width": 0,
-          "height": 0,
-          "point": true,
-          "properties": [
-            {
-              "name": "price",
-              "type": "int",
-              "value": 1200
-            },
-            {
-              "name": "rent",
-              "type": "int",
-              "value": 120
-            }
-          ]
-        },
-        {
-          "id": 22,
-          "name": "繳稅",
-          "type": "TAX",
-          "x": 100,
-          "y": 290,
-          "width": 0,
-          "height": 0,
-          "point": true,
-          "properties": [
-            {
-              "name": "desc",
-              "type": "string",
-              "value": "支付 500"
-            }
-          ]
-        },
-        {
-          "id": 23,
-          "name": "新北",
-          "type": "PROP",
-          "x": 100,
-          "y": 220,
-          "width": 0,
-          "height": 0,
-          "point": true,
-          "properties": [
-            {
-              "name": "price",
-              "type": "int",
-              "value": 1500
-            },
-            {
-              "name": "rent",
-              "type": "int",
-              "value": 150
-            }
-          ]
-        },
-        {
-          "id": 24,
-          "name": "台北",
-          "type": "PROP",
-          "x": 100,
-          "y": 150,
-          "width": 0,
-          "height": 0,
-          "point": true,
-          "properties": [
-            {
-              "name": "price",
-              "type": "int",
-              "value": 2000
-            },
-            {
-              "name": "rent",
-              "type": "int",
-              "value": 200
-            }
-          ]
-        }
-      ],
-      "opacity": 1,
-      "type": "objectgroup",
-      "visible": true,
-      "x": 0,
-      "y": 0
-    }
-  ],
-  "nextlayerid": 2,
-  "nextobjectid": 25,
-  "orientation": "orthogonal",
-  "renderorder": "right-down",
-  "tiledversion": "1.11.0",
-  "tileheight": 40,
-  "tilesets": [],
-  "tilewidth": 40,
-  "type": "map",
-  "version": "1.10",
-  "width": 25
+         "draworder":"topdown",
+         "id":1,
+         "name":"Path",
+         "objects":[
+                {
+                 "height":0,
+                 "id":1,
+                 "name":"\u8d77\u9ede",
+                 "opacity":1,
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"desc",
+                         "type":"string",
+                         "value":"\u7d93\u904e+2000"
+                        }],
+                 "rotation":0,
+                 "type":"START",
+                 "visible":true,
+                 "width":0,
+                 "x":100,
+                 "y":80
+                }, 
+                {
+                 "height":0,
+                 "id":2,
+                 "name":"\u57fa\u9686",
+                 "opacity":1,
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"price",
+                         "type":"int",
+                         "value":800
+                        }, 
+                        {
+                         "name":"rent",
+                         "type":"int",
+                         "value":80
+                        }],
+                 "rotation":0,
+                 "type":"PROP",
+                 "visible":true,
+                 "width":0,
+                 "x":170,
+                 "y":80
+                }, 
+                {
+                 "height":0,
+                 "id":3,
+                 "name":"\u5b9c\u862d",
+                 "opacity":1,
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"price",
+                         "type":"int",
+                         "value":1000
+                        }, 
+                        {
+                         "name":"rent",
+                         "type":"int",
+                         "value":100
+                        }],
+                 "rotation":0,
+                 "type":"PROP",
+                 "visible":true,
+                 "width":0,
+                 "x":240,
+                 "y":80
+                }, 
+                {
+                 "height":0,
+                 "id":4,
+                 "name":"\u6a5f\u6703",
+                 "opacity":1,
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"desc",
+                         "type":"string",
+                         "value":"\u96a8\u6a5f\u4e8b\u4ef6"
+                        }],
+                 "rotation":0,
+                 "type":"CHANCE",
+                 "visible":true,
+                 "width":0,
+                 "x":310,
+                 "y":80
+                }, 
+                {
+                 "height":0,
+                 "id":5,
+                 "name":"\u82b1\u84ee",
+                 "opacity":1,
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"price",
+                         "type":"int",
+                         "value":1400
+                        }, 
+                        {
+                         "name":"rent",
+                         "type":"int",
+                         "value":140
+                        }],
+                 "rotation":0,
+                 "type":"PROP",
+                 "visible":true,
+                 "width":0,
+                 "x":380,
+                 "y":80
+                }, 
+                {
+                 "height":0,
+                 "id":6,
+                 "name":"\u7e73\u7a05",
+                 "opacity":1,
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"desc",
+                         "type":"string",
+                         "value":"\u652f\u4ed8 500"
+                        }],
+                 "rotation":0,
+                 "type":"TAX",
+                 "visible":true,
+                 "width":0,
+                 "x":450,
+                 "y":80
+                }, 
+                {
+                 "height":0,
+                 "id":7,
+                 "name":"\u53f0\u6771",
+                 "opacity":1,
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"price",
+                         "type":"int",
+                         "value":1200
+                        }, 
+                        {
+                         "name":"rent",
+                         "type":"int",
+                         "value":120
+                        }],
+                 "rotation":0,
+                 "type":"PROP",
+                 "visible":true,
+                 "width":0,
+                 "x":520,
+                 "y":80
+                }, 
+                {
+                 "height":0,
+                 "id":8,
+                 "name":"\u547d\u904b",
+                 "opacity":1,
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"desc",
+                         "type":"string",
+                         "value":"\u96a8\u6a5f\u4e8b\u4ef6"
+                        }],
+                 "rotation":0,
+                 "type":"FATE",
+                 "visible":true,
+                 "width":0,
+                 "x":520,
+                 "y":150
+                }, 
+                {
+                 "height":0,
+                 "id":9,
+                 "name":"\u5c4f\u6771",
+                 "opacity":1,
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"price",
+                         "type":"int",
+                         "value":1500
+                        }, 
+                        {
+                         "name":"rent",
+                         "type":"int",
+                         "value":150
+                        }],
+                 "rotation":0,
+                 "type":"PROP",
+                 "visible":true,
+                 "width":0,
+                 "x":520,
+                 "y":220
+                }, 
+                {
+                 "height":0,
+                 "id":10,
+                 "name":"\u505c\u8eca\u5834",
+                 "opacity":1,
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"desc",
+                         "type":"string",
+                         "value":"\u7121\u4e8b\u767c\u751f"
+                        }],
+                 "rotation":0,
+                 "type":"FREE",
+                 "visible":true,
+                 "width":0,
+                 "x":520,
+                 "y":290
+                }, 
+                {
+                 "height":0,
+                 "id":11,
+                 "name":"\u9ad8\u96c4",
+                 "opacity":1,
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"price",
+                         "type":"int",
+                         "value":2800
+                        }, 
+                        {
+                         "name":"rent",
+                         "type":"int",
+                         "value":280
+                        }],
+                 "rotation":0,
+                 "type":"PROP",
+                 "visible":true,
+                 "width":0,
+                 "x":520,
+                 "y":360
+                }, 
+                {
+                 "height":0,
+                 "id":12,
+                 "name":"\u53f0\u5357",
+                 "opacity":1,
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"price",
+                         "type":"int",
+                         "value":2500
+                        }, 
+                        {
+                         "name":"rent",
+                         "type":"int",
+                         "value":250
+                        }],
+                 "rotation":0,
+                 "type":"PROP",
+                 "visible":true,
+                 "width":0,
+                 "x":520,
+                 "y":430
+                }, 
+                {
+                 "height":0,
+                 "id":13,
+                 "name":"\u6a5f\u6703",
+                 "opacity":1,
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"desc",
+                         "type":"string",
+                         "value":"\u96a8\u6a5f\u4e8b\u4ef6"
+                        }],
+                 "rotation":0,
+                 "type":"CHANCE",
+                 "visible":true,
+                 "width":0,
+                 "x":520,
+                 "y":500
+                }, 
+                {
+                 "height":0,
+                 "id":14,
+                 "name":"\u5609\u7fa9",
+                 "opacity":1,
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"price",
+                         "type":"int",
+                         "value":1300
+                        }, 
+                        {
+                         "name":"rent",
+                         "type":"int",
+                         "value":130
+                        }],
+                 "rotation":0,
+                 "type":"PROP",
+                 "visible":true,
+                 "width":0,
+                 "x":450,
+                 "y":500
+                }, 
+                {
+                 "height":0,
+                 "id":15,
+                 "name":"\u96f2\u6797",
+                 "opacity":1,
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"price",
+                         "type":"int",
+                         "value":1100
+                        }, 
+                        {
+                         "name":"rent",
+                         "type":"int",
+                         "value":110
+                        }],
+                 "rotation":0,
+                 "type":"PROP",
+                 "visible":true,
+                 "width":0,
+                 "x":380,
+                 "y":500
+                }, 
+                {
+                 "height":0,
+                 "id":16,
+                 "name":"\u5f70\u5316",
+                 "opacity":1,
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"price",
+                         "type":"int",
+                         "value":1200
+                        }, 
+                        {
+                         "name":"rent",
+                         "type":"int",
+                         "value":120
+                        }],
+                 "rotation":0,
+                 "type":"PROP",
+                 "visible":true,
+                 "width":0,
+                 "x":310,
+                 "y":500
+                }, 
+                {
+                 "height":0,
+                 "id":17,
+                 "name":"\u53f0\u4e2d",
+                 "opacity":1,
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"price",
+                         "type":"int",
+                         "value":2200
+                        }, 
+                        {
+                         "name":"rent",
+                         "type":"int",
+                         "value":220
+                        }],
+                 "rotation":0,
+                 "type":"PROP",
+                 "visible":true,
+                 "width":0,
+                 "x":240,
+                 "y":500
+                }, 
+                {
+                 "height":0,
+                 "id":18,
+                 "name":"\u547d\u904b",
+                 "opacity":1,
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"desc",
+                         "type":"string",
+                         "value":"\u96a8\u6a5f\u4e8b\u4ef6"
+                        }],
+                 "rotation":0,
+                 "type":"FATE",
+                 "visible":true,
+                 "width":0,
+                 "x":170,
+                 "y":500
+                }, 
+                {
+                 "height":0,
+                 "id":19,
+                 "name":"\u82d7\u6817",
+                 "opacity":1,
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"price",
+                         "type":"int",
+                         "value":1000
+                        }, 
+                        {
+                         "name":"rent",
+                         "type":"int",
+                         "value":100
+                        }],
+                 "rotation":0,
+                 "type":"PROP",
+                 "visible":true,
+                 "width":0,
+                 "x":100,
+                 "y":500
+                }, 
+                {
+                 "height":0,
+                 "id":20,
+                 "name":"\u65b0\u7af9",
+                 "opacity":1,
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"price",
+                         "type":"int",
+                         "value":1800
+                        }, 
+                        {
+                         "name":"rent",
+                         "type":"int",
+                         "value":180
+                        }],
+                 "rotation":0,
+                 "type":"PROP",
+                 "visible":true,
+                 "width":0,
+                 "x":100,
+                 "y":430
+                }, 
+                {
+                 "height":0,
+                 "id":21,
+                 "name":"\u6843\u5712",
+                 "opacity":1,
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"price",
+                         "type":"int",
+                         "value":1200
+                        }, 
+                        {
+                         "name":"rent",
+                         "type":"int",
+                         "value":120
+                        }],
+                 "rotation":0,
+                 "type":"PROP",
+                 "visible":true,
+                 "width":0,
+                 "x":100,
+                 "y":360
+                }, 
+                {
+                 "height":0,
+                 "id":22,
+                 "name":"\u7e73\u7a05",
+                 "opacity":1,
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"desc",
+                         "type":"string",
+                         "value":"\u652f\u4ed8 500"
+                        }],
+                 "rotation":0,
+                 "type":"TAX",
+                 "visible":true,
+                 "width":0,
+                 "x":100,
+                 "y":290
+                }, 
+                {
+                 "height":0,
+                 "id":23,
+                 "name":"\u65b0\u5317",
+                 "opacity":1,
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"price",
+                         "type":"int",
+                         "value":1500
+                        }, 
+                        {
+                         "name":"rent",
+                         "type":"int",
+                         "value":150
+                        }],
+                 "rotation":0,
+                 "type":"PROP",
+                 "visible":true,
+                 "width":0,
+                 "x":100,
+                 "y":220
+                }, 
+                {
+                 "height":0,
+                 "id":24,
+                 "name":"\u53f0\u5317",
+                 "opacity":1,
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"price",
+                         "type":"int",
+                         "value":2000
+                        }, 
+                        {
+                         "name":"rent",
+                         "type":"int",
+                         "value":200
+                        }],
+                 "rotation":0,
+                 "type":"PROP",
+                 "visible":true,
+                 "width":0,
+                 "x":100,
+                 "y":150
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }],
+ "nextlayerid":2,
+ "nextobjectid":25,
+ "orientation":"isometric",
+ "renderorder":"right-down",
+ "tiledversion":"1.12.1",
+ "tileheight":40,
+ "tilesets":[],
+ "tilewidth":40,
+ "type":"map",
+ "version":"1.10",
+ "width":25
 }
