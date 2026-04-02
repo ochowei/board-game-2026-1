@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phaser 單機大富翁 - 台灣地圖版</title>
+    <!-- 引入 Phaser 3 -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #2c3e50;
+            font-family: "Microsoft JhengHei", Arial, sans-serif;
+        }
+        canvas {
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+// ==========================================
+// 遊戲資料設定 (依台灣地理位置順時針環島)
+// ==========================================
+const BOARD_SIZE = 24;
+const TILE_DATA = [
+    { name: "起點", type: "START", desc: "經過+2000" },  // 00: 北部
+    { name: "基隆", type: "PROP", price: 800, rent: 80, owner: null }, // 01: 東北部
+    { name: "宜蘭", type: "PROP", price: 1000, rent: 100, owner: null }, // 02: 東部
+    { name: "機會", type: "CHANCE", desc: "隨機事件" }, // 03
+    { name: "花蓮", type: "PROP", price: 1400, rent: 140, owner: null }, // 04: 東部
+    { name: "繳稅", type: "TAX", desc: "支付 500" }, // 05
+    { name: "台東", type: "PROP", price: 1200, rent: 120, owner: null }, // 06: 東南部
+    { name: "命運", type: "FATE", desc: "隨機事件" }, // 07
+    { name: "屏東", type: "PROP", price: 1500, rent: 150, owner: null }, // 08: 南端
+    { name: "停車場", type: "FREE", desc: "無事發生" }, // 09: 休息站
+    { name: "高雄", type: "PROP", price: 2800, rent: 280, owner: null }, // 10: 西南部
+    { name: "台南", type: "PROP", price: 2500, rent: 250, owner: null }, // 11: 西南部
+    { name: "機會", type: "CHANCE", desc: "隨機事件" }, // 12
+    { name: "嘉義", type: "PROP", price: 1300, rent: 130, owner: null }, // 13: 西部
+    { name: "雲林", type: "PROP", price: 1100, rent: 110, owner: null }, // 14: 西部
+    { name: "彰化", type: "PROP", price: 1200, rent: 120, owner: null }, // 15: 西部
+    { name: "台中", type: "PROP", price: 2200, rent: 220, owner: null }, // 16: 中部
+    { name: "命運", type: "FATE", desc: "隨機事件" }, // 17
+    { name: "苗栗", type: "PROP", price: 1000, rent: 100, owner: null }, // 18: 中北部
+    { name: "新竹", type: "PROP", price: 1800, rent: 180, owner: null }, // 19: 西北部
+    { name: "桃園", type: "PROP", price: 1200, rent: 120, owner: null }, // 20: 西北部
+    { name: "繳稅", type: "TAX", desc: "支付 500" }, // 21
+    { name: "新北", type: "PROP", price: 1500, rent: 150, owner: null }, // 22: 北部
+    { name: "台北", type: "PROP", price: 2000, rent: 200, owner: null }  // 23: 北部
+];
+
+// 台灣形狀的 24 個座標點 (順時針描繪)
+const TAIWAN_POINTS = [
+    { x: 320, y: 55 },  // 00: 起點
+    { x: 355, y: 75 },  // 01: 基隆
+    { x: 385, y: 105 }, // 02: 宜蘭
+    { x: 410, y: 140 }, // 03: 機會
+    { x: 430, y: 185 }, // 04: 花蓮
+    { x: 445, y: 235 }, // 05: 繳稅
+    { x: 450, y: 290 }, // 06: 台東
+    { x: 440, y: 350 }, // 07: 命運
+    { x: 415, y: 410 }, // 08: 屏東
+    { x: 380, y: 460 }, // 09: 停車場
+    { x: 340, y: 500 }, // 10: 高雄
+    { x: 290, y: 525 }, // 11: 台南 (底端)
+    { x: 240, y: 510 }, // 12: 機會
+    { x: 200, y: 470 }, // 13: 嘉義
+    { x: 165, y: 420 }, // 14: 雲林
+    { x: 145, y: 365 }, // 15: 彰化
+    { x: 135, y: 305 }, // 16: 台中
+    { x: 135, y: 245 }, // 17: 命運
+    { x: 145, y: 185 }, // 18: 苗栗
+    { x: 165, y: 135 }, // 19: 新竹
+    { x: 195, y: 95 },  // 20: 桃園
+    { x: 230, y: 65 },  // 21: 繳稅
+    { x: 265, y: 45 },  // 22: 新北
+    { x: 295, y: 45 }   // 23: 台北
+];
+
+const COLORS = {
+    bg: 0xecf0f1,
+    board: 0xbdc3c7,
+    text: '#2c3e50',
+    player: 0x3498db, // 玩家顏色 (藍色)
+    ai: 0xe74c3c,     // AI顏色 (紅色)
+    neutral: 0x95a5a6,
+    logBg: 0x34495e,
+    logText: '#ecf0f1'
+};
+
+// ==========================================
+// 主要遊戲場景
+// ==========================================
+class MainScene extends Phaser.Scene {
+    constructor() {
+        super({ key: 'MainScene' });
+        this.boardUI = []; 
+        this.logMessages = [];
+        
+        this.players = {
+            human: { id: 'human', name: '玩家', money: 10000, pos: 0, color: COLORS.player },
+            ai: { id: 'ai', name: '電腦', money: 10000, pos: 0, color: COLORS.ai }
+        };
+        this.currentTurn = 'human';
+        this.gameState = 'WAITING_ROLL'; 
+    }
+
+    create() {
+        this.cameras.main.setBackgroundColor(COLORS.bg);
+        
+        this.drawTaiwanBackground(); // 畫一個淡淡的台灣底色
+        this.drawBoard();
+        this.createTokens();
+        this.createSidebar();
+        
+        this.addLog("遊戲開始！這次我們來環島！");
+        this.addLog("玩家回合，請擲骰子。");
+        this.updateStats();
+    }
+
+    // 繪製淡淡的台灣島背影連接線
+    drawTaiwanBackground() {
+        const polygon = this.add.polygon(0, 0, TAIWAN_POINTS, 0xbdc3c7, 0.3).setOrigin(0);
+        polygon.setStrokeStyle(4, 0x95a5a6, 0.5);
+    }
+
+    getTilePos(index) {
+        return TAIWAN_POINTS[index];
+    }
+
+    // 繪製棋盤
+    drawBoard() {
+        for (let i = 0; i < BOARD_SIZE; i++) {
+            const pos = this.getTilePos(i);
+            const data = TILE_DATA[i];
+            
+            // 格子背景 (縮小為 50x50)
+            const rect = this.add.rectangle(pos.x, pos.y, 50, 50, COLORS.board).setStrokeStyle(2, 0x7f8c8d);
+            
+            // 地名文字
+            const nameText = this.add.text(pos.x, pos.y - 8, data.name, { 
+                fontSize: '13px', color: COLORS.text, fontStyle: 'bold' 
+            }).setOrigin(0.5);
+            
+            // 價格/資訊文字
+            let infoStr = "";
+            if (data.type === "PROP") infoStr = `$${data.price}`;
+            else if (data.desc) infoStr = data.desc;
+            
+            const infoText = this.add.text(pos.x, pos.y + 12, infoStr, { 
+                fontSize: '10px', color: COLORS.text 
+            }).setOrigin(0.5);
+
+            // 擁有者標記 (色條)
+            const ownerBar = this.add.rectangle(pos.x, pos.y - 22, 44, 6, COLORS.neutral).setOrigin(0.5, 0).setVisible(false);
+
+            this.boardUI[i] = { rect, nameText, infoText, ownerBar };
+        }
+    }
+
+    // 建立玩家與AI的棋子
+    createTokens() {
+        const startPos = this.getTilePos(0);
+        // 玩家棋子稍微往左偏移，半徑縮小
+        this.humanToken = this.add.circle(startPos.x - 10, startPos.y, 8, COLORS.player).setStrokeStyle(2, 0xffffff);
+        // AI棋子稍微往右偏移
+        this.aiToken = this.add.circle(startPos.x + 10, startPos.y, 8, COLORS.ai).setStrokeStyle(2, 0xffffff);
+    }
+
+    createSidebar() {
+        const startX = 600;
+        this.add.rectangle(startX, 0, 400, 600, COLORS.logBg).setOrigin(0);
+        this.add.text(startX + 200, 30, '環島大富翁', { fontSize: '28px', color: '#fff', fontStyle: 'bold' }).setOrigin(0.5);
+
+        this.humanStatText = this.add.text(startX + 30, 80, '', { fontSize: '20px', color: '#3498db', fontStyle: 'bold' });
+        this.aiStatText = this.add.text(startX + 220, 80, '', { fontSize: '20px', color: '#e74c3c', fontStyle: 'bold' });
+
+        this.add.rectangle(startX + 20, 130, 360, 250, 0x2c3e50).setOrigin(0);
+        this.logTextDisplay = this.add.text(startX + 30, 140, '', { 
+            fontSize: '16px', color: COLORS.logText, wordWrap: { width: 340 }, lineSpacing: 5 
+        });
+
+        this.diceDisplay = this.add.text(startX + 200, 420, '🎲', { fontSize: '48px' }).setOrigin(0.5);
+
+        this.btnRoll = this.createButton(startX + 200, 490, '擲骰子', () => this.rollDice());
+        this.btnAction1 = this.createButton(startX + 100, 550, '購買', () => this.buyProperty()).setVisible(false);
+        this.btnAction2 = this.createButton(startX + 300, 550, '不買/結束', () => this.endTurn()).setVisible(false);
+    }
+
+    createButton(x, y, text, callback) {
+        const btn = this.add.container(x, y);
+        const bg = this.add.rectangle(0, 0, 120, 40, 0xf39c12).setInteractive({ useHandCursor: true });
+        const txt = this.add.text(0, 0, text, { fontSize: '18px', color: '#fff', fontStyle: 'bold' }).setOrigin(0.5);
+        
+        bg.on('pointerover', () => bg.setFillStyle(0xe67e22));
+        bg.on('pointerout', () => bg.setFillStyle(0xf39c12));
+        bg.on('pointerdown', () => {
+            bg.setFillStyle(0xd35400);
+            callback();
+        });
+        bg.on('pointerup', () => bg.setFillStyle(0xe67e22));
+        
+        btn.add([bg, txt]);
+        return btn;
+    }
+
+    updateStats() {
+        this.humanStatText.setText(`玩家金錢:\n$${this.players.human.money}`);
+        this.aiStatText.setText(`電腦金錢:\n$${this.players.ai.money}`);
+        
+        if (this.players.human.money < 0) this.gameOver('ai');
+        if (this.players.ai.money < 0) this.gameOver('human');
+    }
+
+    addLog(msg) {
+        this.logMessages.push(msg);
+        if (this.logMessages.length > 10) this.logMessages.shift();
+        this.logTextDisplay.setText(this.logMessages.join('\n'));
+    }
+
+    rollDice() {
+        if (this.gameState !== 'WAITING_ROLL' || this.currentTurn !== 'human') return;
+        this.gameState = 'MOVING';
+        this.btnRoll.setVisible(false);
+        
+        const steps = Phaser.Math.Between(1, 6);
+        this.diceDisplay.setText(`🎲 ${steps}`);
+        this.addLog(`玩家擲出了 ${steps} 點`);
+        this.movePlayer('human', steps);
+    }
+
+    doAiTurn() {
+        this.gameState = 'MOVING';
+        this.btnRoll.setVisible(false);
+        this.time.delayedCall(1000, () => {
+            const steps = Phaser.Math.Between(1, 6);
+            this.diceDisplay.setText(`🎲 ${steps}`);
+            this.addLog(`電腦擲出了 ${steps} 點`);
+            this.movePlayer('ai', steps);
+        });
+    }
+
+    movePlayer(playerId, steps) {
+        const player = this.players[playerId];
+        const token = playerId === 'human' ? this.humanToken : this.aiToken;
+        const targetPos = player.pos + steps;
+        
+        let path = [];
+        for (let i = 1; i <= steps; i++) {
+            let nextIndex = (player.pos + i) % BOARD_SIZE;
+            let visualPos = this.getTilePos(nextIndex);
+            // 偏移一點避免重疊
+            let ox = playerId === 'human' ? -10 : 10;
+            path.push({ x: visualPos.x + ox, y: visualPos.y });
+        }
+
+        if (targetPos >= BOARD_SIZE) {
+            player.money += 2000;
+            this.addLog(`${player.name} 繞台灣一圈！獲得 $2000`);
+            this.updateStats();
+        }
+
+        player.pos = targetPos % BOARD_SIZE;
+
+        let timeline = this.tweens.createTimeline();
+        path.forEach((p, idx) => {
+            timeline.add({
+                targets: token,
+                x: p.x,
+                y: p.y,
+                duration: 200,
+                ease: 'Linear',
+                onComplete: () => {
+                    if (idx === path.length - 1) {
+                        this.handleTileEvent(playerId);
+                    }
+                }
+            });
+        });
+        timeline.play();
+    }
+
+    handleTileEvent(playerId) {
+        const player = this.players[playerId];
+        const tile = TILE_DATA[player.pos];
+        
+        this.gameState = 'ACTION';
+        this.addLog(`${player.name} 停在 【${tile.name}】`);
+
+        if (tile.type === "START" || tile.type === "FREE") {
+            this.endTurn();
+        } 
+        else if (tile.type === "CHANCE" || tile.type === "FATE") {
+            this.handleRandomEvent(player);
+            this.endTurn();
+        } 
+        else if (tile.type === "TAX") {
+            player.money -= 500;
+            this.addLog(`${player.name} 繳交過路稅金 $500`);
+            this.updateStats();
+            this.endTurn();
+        } 
+        else if (tile.type === "PROP") {
+            if (tile.owner === null) {
+                if (playerId === 'human') {
+                    this.btnAction1.setVisible(true);
+                    this.btnAction2.setVisible(true);
+                } else {
+                    this.time.delayedCall(1000, () => {
+                        if (player.money >= tile.price) this.buyPropertyLogic('ai', player.pos);
+                        else this.addLog(`電腦資金不足，放棄購買`);
+                        this.endTurn();
+                    });
+                }
+            } else if (tile.owner !== playerId) {
+                const owner = this.players[tile.owner];
+                player.money -= tile.rent;
+                owner.money += tile.rent;
+                this.addLog(`${player.name} 支付過路費 $${tile.rent} 給 ${owner.name}`);
+                this.updateStats();
+                this.endTurn();
+            } else {
+                this.addLog("巡視自己的縣市！");
+                this.endTurn();
+            }
+        }
+    }
+
+    handleRandomEvent(player) {
+        const events = [
+            { msg: "在夜市撿到錢包，獲得 $300", val: 300 },
+            { msg: "發票中大獎，獲得 $1000", val: 1000 },
+            { msg: "機車違停被拖吊，失去 $200", val: -200 },
+            { msg: "被測速照相拍到，失去 $500", val: -500 }
+        ];
+        const ev = Phaser.Utils.Array.GetRandom(events);
+        player.money += ev.val;
+        this.addLog(`隨機事件: ${ev.msg}`);
+        this.updateStats();
+    }
+
+    buyProperty() {
+        if (this.currentTurn !== 'human') return;
+        const pos = this.players.human.pos;
+        const tile = TILE_DATA[pos];
+        
+        if (this.players.human.money >= tile.price) {
+            this.buyPropertyLogic('human', pos);
+            this.btnAction1.setVisible(false);
+            this.btnAction2.setVisible(false);
+            this.endTurn();
+        } else {
+            this.addLog("資金不足，無法購買！");
+        }
+    }
+
+    buyPropertyLogic(playerId, pos) {
+        const player = this.players[playerId];
+        const tile = TILE_DATA[pos];
+        
+        player.money -= tile.price;
+        tile.owner = playerId;
+        
+        const ui = this.boardUI[pos];
+        ui.ownerBar.setFillStyle(player.color).setVisible(true);
+        ui.infoText.setText(`租金 $${tile.rent}`);
+        
+        this.addLog(`${player.name} 花費 $${tile.price} 買下了 【${tile.name}】`);
+        this.updateStats();
+    }
+
+    endTurn() {
+        this.btnAction1.setVisible(false);
+        this.btnAction2.setVisible(false);
+        
+        if (this.gameState === 'GAME_OVER') return;
+
+        this.currentTurn = this.currentTurn === 'human' ? 'ai' : 'human';
+        this.gameState = 'WAITING_ROLL';
+        
+        this.time.delayedCall(1000, () => {
+            if (this.currentTurn === 'human') {
+                this.addLog("--- 玩家回合 ---");
+                this.btnRoll.setVisible(true);
+            } else {
+                this.addLog("--- 電腦回合 ---");
+                this.doAiTurn();
+            }
+        });
+    }
+
+    gameOver(winnerId) {
+        this.gameState = 'GAME_OVER';
+        this.btnRoll.setVisible(false);
+        this.btnAction1.setVisible(false);
+        this.btnAction2.setVisible(false);
+
+        const winner = this.players[winnerId];
+        this.addLog(`\n🎉 遊戲結束！\n🏆 勝利者是：${winner.name}`);
+
+        const overlay = this.add.rectangle(0, 0, 1000, 600, 0x000000, 0.8).setOrigin(0);
+        this.add.text(500, 250, 'GAME OVER', { fontSize: '64px', color: '#e74c3c', fontStyle: 'bold' }).setOrigin(0.5);
+        this.add.text(500, 330, `${winner.name} 獲勝！`, { fontSize: '32px', color: '#fff' }).setOrigin(0.5);
+        
+        const restartBtn = this.add.rectangle(500, 420, 200, 50, 0x3498db).setInteractive({ useHandCursor: true });
+        this.add.text(500, 420, '重新開始', { fontSize: '24px', color: '#fff', fontStyle: 'bold' }).setOrigin(0.5);
+        
+        restartBtn.on('pointerdown', () => {
+            TILE_DATA.forEach(t => t.owner = null);
+            this.scene.restart();
+        });
+    }
+}
+
+const config = {
+    type: Phaser.AUTO,
+    width: 1000,
+    height: 600,
+    parent: document.body,
+    scene: [MainScene],
+    scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH
+    }
+};
+
+const game = new Phaser.Game(config);
+</script>
+
+</body>
+</html>
