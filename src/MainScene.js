@@ -6,6 +6,10 @@ const MAP_URL = new URL("./maps/taiwan-loop.tmj", import.meta.url).toString();
 export default class MainScene extends Phaser.Scene {
   constructor() {
     super({ key: "MainScene" });
+    this.initializeState();
+  }
+
+  initializeState() {
     this.boardUI = [];
     this.logMessages = [];
     this.pathPoints = [];
@@ -24,6 +28,7 @@ export default class MainScene extends Phaser.Scene {
   }
 
   create() {
+    this.initializeState();
     this.loadMapData();
     this.cameras.main.setBackgroundColor(COLORS.bg);
     this.drawTaiwanBackground();
