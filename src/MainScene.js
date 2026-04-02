@@ -14,6 +14,12 @@ export default class MainScene extends Phaser.Scene {
     this.logMessages = [];
     this.pathPoints = [];
     this.tileData = [];
+    this.boardProjection = {
+      skewX: 0.35,
+      scaleY: 0.75,
+      offsetX: 40,
+      offsetY: 30
+    };
 
     this.players = {
       human: { id: "human", name: "玩家", money: 10000, pos: 0, color: COLORS.player },
@@ -71,12 +77,20 @@ export default class MainScene extends Phaser.Scene {
   }
 
   drawTaiwanBackground() {
-    const polygon = this.add.polygon(0, 0, this.pathPoints, 0xbdc3c7, 0.3).setOrigin(0);
+    const projectedPath = this.pathPoints.map((point) => this.projectPoint(point));
+    const polygon = this.add.polygon(0, 0, projectedPath, 0xbdc3c7, 0.3).setOrigin(0);
     polygon.setStrokeStyle(4, 0x95a5a6, 0.5);
   }
 
+  projectPoint(point) {
+    return {
+      x: point.x + point.y * this.boardProjection.skewX + this.boardProjection.offsetX,
+      y: point.y * this.boardProjection.scaleY + this.boardProjection.offsetY
+    };
+  }
+
   getTilePos(index) {
-    return this.pathPoints[index];
+    return this.projectPoint(this.pathPoints[index]);
   }
 
   drawBoard() {
