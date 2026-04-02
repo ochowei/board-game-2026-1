@@ -1,11 +1,15 @@
 import Phaser from "phaser";
-import { BOARD_SIZE, COLORS, TAIWAN_POINTS, TILE_DATA } from "./gameData";
+import { COLORS } from "./gameData";
+
+const MAP_URL = new URL("./maps/taiwan-loop.tmj", import.meta.url).toString();
 
 export default class MainScene extends Phaser.Scene {
   constructor() {
     super({ key: "MainScene" });
     this.boardUI = [];
     this.logMessages = [];
+    this.pathPoints = [];
+    this.tileData = [];
 
     this.players = {
       human: { id: "human", name: "玩家", money: 10000, pos: 0, color: COLORS.player },
@@ -15,7 +19,12 @@ export default class MainScene extends Phaser.Scene {
     this.gameState = "WAITING_ROLL";
   }
 
+  preload() {
+    this.load.tilemapTiledJSON("taiwan-map", MAP_URL);
+  }
+
   create() {
+    this.loadMapData();
     this.cameras.main.setBackgroundColor(COLORS.bg);
     this.drawTaiwanBackground();
     this.drawBoard();
@@ -27,19 +36,48 @@ export default class MainScene extends Phaser.Scene {
     this.updateStats();
   }
 
+  loadMapData() {
+    const map = this.make.tilemap({ key: "taiwan-map" });
+    const layer = map.getObjectLayer("Path");
+
+    if (!layer || !layer.objects || layer.objects.length === 0) {
+      throw new Error("找不到 Tiled 物件層 Path，請確認地圖格式。");
+    }
+
+    const getProp = (obj, key, fallback = null) => {
+      const prop = obj.properties?.find((item) => item.name === key);
+      return prop ? prop.value : fallback;
+    };
+
+    const ordered = [...layer.objects].sort((a, b) => a.id - b.id);
+    this.pathPoints = ordered.map((obj) => ({ x: obj.x, y: obj.y }));
+    this.tileData = ordered.map((obj) => ({
+      name: obj.name,
+      type: obj.type,
+      desc: getProp(obj, "desc", ""),
+      price: Number(getProp(obj, "price", 0)),
+      rent: Number(getProp(obj, "rent", 0)),
+      owner: null
+    }));
+  }
+
+  get boardSize() {
+    return this.tileData.length;
+  }
+
   drawTaiwanBackground() {
-    const polygon = this.add.polygon(0, 0, TAIWAN_POINTS, 0xbdc3c7, 0.3).setOrigin(0);
+    const polygon = this.add.polygon(0, 0, this.pathPoints, 0xbdc3c7, 0.3).setOrigin(0);
     polygon.setStrokeStyle(4, 0x95a5a6, 0.5);
   }
 
   getTilePos(index) {
-    return TAIWAN_POINTS[index];
+    return this.pathPoints[index];
   }
 
   drawBoard() {
-    for (let i = 0; i < BOARD_SIZE; i += 1) {
+    for (let i = 0; i < this.boardSize; i += 1) {
       const pos = this.getTilePos(i);
-      const data = TILE_DATA[i];
+      const data = this.tileData[i];
 
       const rect = this.add.rectangle(pos.x, pos.y, 50, 50, COLORS.board).setStrokeStyle(2, 0x7f8c8d);
 
@@ -162,19 +200,19 @@ export default class MainScene extends Phaser.Scene {
 
     const path = [];
     for (let i = 1; i <= steps; i += 1) {
-      const nextIndex = (player.pos + i) % BOARD_SIZE;
+      const nextIndex = (player.pos + i) % this.boardSize;
       const visualPos = this.getTilePos(nextIndex);
       const offsetX = playerId === "human" ? -10 : 10;
       path.push({ x: visualPos.x + offsetX, y: visualPos.y });
     }
 
-    if (targetPos >= BOARD_SIZE) {
+    if (targetPos >= this.boardSize) {
       player.money += 2000;
       this.addLog(`${player.name} 繞台灣一圈！獲得 $2000`);
       this.updateStats();
     }
 
-    player.pos = targetPos % BOARD_SIZE;
+    player.pos = targetPos % this.boardSize;
 
     const timeline = this.tweens.createTimeline();
     path.forEach((point, idx) => {
@@ -196,7 +234,7 @@ export default class MainScene extends Phaser.Scene {
 
   handleTileEvent(playerId) {
     const player = this.players[playerId];
-    const tile = TILE_DATA[player.pos];
+    const tile = this.tileData[player.pos];
 
     this.gameState = "ACTION";
     this.addLog(`${player.name} 停在 【${tile.name}】`);
@@ -253,7 +291,7 @@ export default class MainScene extends Phaser.Scene {
   buyProperty() {
     if (this.currentTurn !== "human") return;
     const pos = this.players.human.pos;
-    const tile = TILE_DATA[pos];
+    const tile = this.tileData[pos];
 
     if (this.players.human.money >= tile.price) {
       this.buyPropertyLogic("human", pos);
@@ -267,7 +305,7 @@ export default class MainScene extends Phaser.Scene {
 
   buyPropertyLogic(playerId, pos) {
     const player = this.players[playerId];
-    const tile = TILE_DATA[pos];
+    const tile = this.tileData[pos];
 
     player.money -= tile.price;
     tile.owner = playerId;
@@ -319,7 +357,7 @@ export default class MainScene extends Phaser.Scene {
     this.add.text(500, 420, "重新開始", { fontSize: "24px", color: "#fff", fontStyle: "bold" }).setOrigin(0.5);
 
     restartBtn.on("pointerdown", () => {
-      TILE_DATA.forEach((tile) => {
+      this.tileData.forEach((tile) => {
         tile.owner = null;
       });
       this.scene.restart();
