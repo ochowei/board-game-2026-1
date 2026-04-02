@@ -214,22 +214,20 @@ export default class MainScene extends Phaser.Scene {
 
     player.pos = targetPos % this.boardSize;
 
-    const timeline = this.tweens.createTimeline();
-    path.forEach((point, idx) => {
-      timeline.add({
-        targets: token,
-        x: point.x,
-        y: point.y,
-        duration: 200,
-        ease: "Linear",
-        onComplete: () => {
-          if (idx === path.length - 1) {
-            this.handleTileEvent(playerId);
-          }
-        }
-      });
+    const tweens = path.map((point) => ({
+      targets: token,
+      x: point.x,
+      y: point.y,
+      duration: 200,
+      ease: "Linear"
+    }));
+
+    this.tweens.chain({
+      tweens,
+      onComplete: () => {
+        this.handleTileEvent(playerId);
+      }
     });
-    timeline.play();
   }
 
   handleTileEvent(playerId) {
