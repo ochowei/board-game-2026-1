@@ -154,8 +154,21 @@ function simulateGame({ turns, seed, verbose }) {
   }
 
   const [human, ai] = players;
+
+  // Calculate total assets (money + property value)
+  for (const player of players) {
+    let propertyValue = 0;
+    for (const propId of player.properties) {
+      const tile = tiles.find((t) => t.id === propId);
+      if (tile) {
+        propertyValue += tile.price;
+      }
+    }
+    player.totalAssets = player.money + propertyValue;
+  }
+
   if (!winner) {
-    winner = human.money === ai.money ? "draw" : human.money > ai.money ? "human" : "ai";
+    winner = human.totalAssets === ai.totalAssets ? "draw" : human.totalAssets > ai.totalAssets ? "human" : "ai";
   }
 
   return {
@@ -180,7 +193,7 @@ function printSummary(result) {
   console.log(`勝利者: ${winnerName}`);
 
   for (const player of result.players) {
-    console.log(`- ${player.name}: 金額 $${player.money}, 地產數 ${player.properties.length}`);
+    console.log(`- ${player.name}: 金額 $${player.money}, 地產數 ${player.properties.length}, 總資產 $${player.totalAssets}`);
   }
 
   console.log("\n地產所有權：");
