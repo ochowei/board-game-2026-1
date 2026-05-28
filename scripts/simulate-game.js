@@ -100,6 +100,7 @@ function simulateGame({ turns, seed, verbose }) {
 
   const logs = [];
   let winner = null;
+  let actualTurns = 0;
 
   const addLog = (msg) => {
     logs.push(msg);
@@ -107,6 +108,7 @@ function simulateGame({ turns, seed, verbose }) {
   };
 
   for (let round = 1; round <= turns && !winner; round += 1) {
+    actualTurns = round;
     for (const player of players) {
       const opponent = players.find((p) => p.id !== player.id);
       const steps = randomInt(1, 6, rnd);
@@ -159,7 +161,7 @@ function simulateGame({ turns, seed, verbose }) {
   }
 
   return {
-    turns,
+    turns: actualTurns,
     seed,
     winner,
     players,
